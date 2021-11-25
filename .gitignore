@@ -1,0 +1,4 @@
+# Build directory (JS files)
+build
+# Node modules directory (Node.js libs)
+node_modules
