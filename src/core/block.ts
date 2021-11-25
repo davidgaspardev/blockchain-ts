@@ -1,9 +1,10 @@
 import { SHA256 } from "crypto-js";
 
-type BlockProps = {
-    index: number;
+export type BlockProps = {
+    version: number;
+    height: number;
     timestamp: Date;
-    previousHash: string;
+    previousHash?: string;
     body: Object;
 };
 
@@ -13,12 +14,18 @@ type BlockProps = {
 export default class Block {
 
     public static create(props: BlockProps): Block {
-        const { index, timestamp, previousHash, body } = props;
-        return new Block(index, timestamp, previousHash, body);
+        const { version, height, timestamp, previousHash, body } = props;
+
+        if(!previousHash && height !== 0)
+            // It's not genesis block
+            throw Error("The block must have the previous hash");
+
+        return new Block(version, height, timestamp, previousHash, body);
     }
 
     // Properties
-    private readonly index: number;
+    private readonly version: number;
+    private readonly height: number;
     private readonly timestamp: Date;
     private readonly previousHash: string;
     private readonly body: Object;
@@ -26,13 +33,21 @@ export default class Block {
     /**
      * Build a block
      * 
-     * @param {number} index 
+     * @param {number} version
+     * @param {number} height
      * @param {Date} timestamp 
      * @param {string} previousHash 
      * @param {Object} body 
      */
-    private constructor(index: number, timestamp: Date, previousHash: string, body: Object) {
-        this.index = index;
+    private constructor(
+        version: number, 
+        height: number,
+        timestamp: Date,
+        previousHash: string = "",
+        body: Object
+    ) {
+        this.version = version;
+        this.height = height;
         this.timestamp = timestamp;
         this.previousHash = previousHash;
         this.body = body;
@@ -41,9 +56,10 @@ export default class Block {
     }
 
     private loadAllData(): string {
-        const { index, timestamp, previousHash, body } = this;
+        const { version, height, timestamp, previousHash, body } = this;
 
-        return index.toString() 
+        return version.toString()
+            + height.toString()
             + timestamp.toString()
             + previousHash
             + JSON.stringify(body);
