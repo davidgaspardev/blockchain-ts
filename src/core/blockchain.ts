@@ -120,4 +120,24 @@ export default class Blockchain {
 
         return chain[height];
     }
+
+    /**
+     * This method will return a Promise that will resolve with an array of Stars objects existing in the chain 
+     * and are belongs to the owner with the wallet address passed as parameter.
+     * Remember the star should be returned decoded.
+     */
+    public async getStarsByWalletAddress(address: string): Promise<Array<Object>> {
+        // Destructuring assignment
+        const { chain } = this;
+
+        const stars = chain.filter((block) => {
+            block.owner === address
+        }).map((block) => block.getBData());
+
+        if(stars.length === 0) {
+            throw Error("Address not found");
+        }
+
+        return stars;
+    }
 }
