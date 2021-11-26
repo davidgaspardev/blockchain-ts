@@ -48,6 +48,14 @@ export default class Block {
         return this._timestamp || 0;
     }
 
+    private _owner?: string;
+    set owner(owner: string) {
+        this._owner ??= owner;
+    }
+    get owner(): string {
+        return this._owner || "";
+    }
+
     // Hash
     private _hash?: string;
     set hash(hash: string) {
