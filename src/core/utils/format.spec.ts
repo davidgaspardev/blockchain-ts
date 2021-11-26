@@ -32,4 +32,11 @@ describe("Formating data", () => {
 
         expect(json2hex(nameJson)).toEqual(nameJsonHex);
     });
+
+    test("Decode hexadicmal to plain text (ASCII)", () => {
+        const nameHex = "446176696420476173706172";
+        const name = "David Gaspar";
+
+        expect(hex2ascii(nameHex)).toEqual(name);
+    });
 });

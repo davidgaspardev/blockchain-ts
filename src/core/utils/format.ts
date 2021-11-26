@@ -9,3 +9,7 @@ export function json2hex(data: Object): string {
 export function string2hex(data: string): string {
     return Buffer.from(data).toString('hex');
 }
+
+export function hex2ascii(dataHex: string): string {
+    return Buffer.from(dataHex, 'hex').toString('ascii');
+}
