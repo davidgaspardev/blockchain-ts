@@ -87,4 +87,18 @@ export default class Block {
     public getPreviousHash(): string {
         return this.previousHash || "";
     }
+
+    /**
+     *  validate() method will validate if the block has been tampered or not.
+     *  Been tampered means that someone from outside the application tried to change
+     *  values in the block data as a consecuence the hash of the block should be different.
+     */
+    public async validate(): Promise<boolean> {
+        // Destructuring assignment
+        const { hash, getRawData } = this;
+
+        this.hash = SHA256(getRawData()).toString();
+
+        return this.hash === hash;
+    }
 }

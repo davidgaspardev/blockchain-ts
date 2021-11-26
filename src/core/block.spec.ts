@@ -29,4 +29,9 @@ describe("Block tests", () => {
         expect(block.getHash()).toEqual(hash);
         expect(block.getPreviousHash()).toEqual(previousHash);
     });
+
+    test("Block validation", async () => {
+        // This block is not valid, because was setted dummy hashes.
+        expect(await block.validate()).toEqual(false);
+    });
 });

@@ -14,7 +14,7 @@ describe("Tests in blockchain", () => {
     });
 
     const newBlockNumber = 8;
-    test(`Create ${newBlockNumber} blocks`, () => {
+    test(`Create ${newBlockNumber} new blocks`, () => {
         for(let i = 1; i <= newBlockNumber; i++) {
             blockchain.addBlock(Block.create({
                 version: 1,
@@ -27,7 +27,13 @@ describe("Tests in blockchain", () => {
         }
 
         expect(blockchain!.getCopyBlock().length).toEqual(newBlockNumber + /** genesis */ 1);
+    });
 
-        console.log("Blockchain:", blockchain);
+    test(`Validate all blocks`, async () => {
+        const blocks = blockchain!.getCopyBlock();
+
+        for(let i = 0; i < blocks.length; i++) {
+            expect(await blocks[i].validate()).toEqual(true);
+        }
     });
 });
