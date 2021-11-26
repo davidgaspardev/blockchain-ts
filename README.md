@@ -1,8 +1,22 @@
 # Blockchain
 
-Developing a simple blockchain with Typescript.
+Developing a simple **private blockchain** with Typescript.
 
-## Block data model
+___
+
+## Public vs Private Blockchain
+
+|                   | **Public Blockchain**  | **Private Blockchain**   |
+|-------------------|------------------------|--------------------------|
+| **Permissions**   | Permissionless         | Permissioned             |
+| **Scability**     | More difficult         | Simpler                  |
+| **Vulnerability** | Less vulnerable        | More vulnerable          |
+| **Compliance**    | More difficult         | Simpler                  |
+
+### Cross Chain Functionality
+Allow a series of protocols that work in harmony to deliver decentralized applications.
+
+## Block Data Model
 
 Data structure model used in blocks categorized into two main parts: **header** and **body**.
 
