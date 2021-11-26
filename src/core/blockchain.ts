@@ -97,4 +97,27 @@ export default class Blockchain {
         block.owner = address;
         return await addBlock(block);
     }
+
+    /**
+     * This method will return a Promise that will resolve with the Block
+     *  with the hash passed as a parameter.
+     * Search on the chain array for the block that has the hash.
+     */
+    public async getBlockByHash(hash: string): Promise<Block> {
+        // Destruturing assignment
+        const { chain } = this;
+
+        return chain.filter((block) => block.hash === hash)[0];
+    }
+
+    /**
+     * This method will return a Promise that will resolve with the Block object 
+     * with the height equal to the parameter `height`.
+     */
+    public async getBlockByHeight(height: number): Promise<Block> {
+        // Destrutuging assignment
+        const { chain } = this;
+
+        return chain[height];
+    }
 }
