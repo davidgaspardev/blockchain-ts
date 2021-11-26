@@ -1,5 +1,5 @@
 import Block from "./block";
-import { getTimestamp } from "./utils/format";
+import { getTimestamp, json2hex } from "./utils/format";
 
 describe("Block tests", () => {
     let block: Block;
@@ -9,9 +9,9 @@ describe("Block tests", () => {
             version: 1,
             height: 3,
             timestamp: getTimestamp(),
-            body: {
-                amount: 2500
-            }
+            body: json2hex({
+                amount: 1897
+            })
         });
     
         expect(block).not.toBeUndefined();

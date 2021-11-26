@@ -1,6 +1,6 @@
 import Block from "./block";
 import Blockchain from "./blockchain";
-import { getTimestamp } from "./utils/format";
+import { getTimestamp, json2hex } from "./utils/format";
 
 describe("Tests in blockchain", () => {
 
@@ -20,9 +20,9 @@ describe("Tests in blockchain", () => {
                 version: 1,
                 timestamp: getTimestamp(),
                 height: i,
-                body: {
+                body: json2hex({
                     amount: i * 2500
-                }
+                })
             }));
         }
 

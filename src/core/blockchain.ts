@@ -1,6 +1,6 @@
 import { SHA256 } from "crypto-js";
 import Block from "./block";
-import { getTimestamp } from "./utils/format";
+import { getTimestamp, json2hex } from "./utils/format";
 
 export default class Blockchain {
 
@@ -30,9 +30,9 @@ export default class Blockchain {
             version: 1,
             height: getHeight(),
             timestamp: getTimestamp(),
-            body: {
-                amount: 0
-            }
+            body: json2hex({
+                hello: "Blockchain"
+            })
         });
 
         addBlock(genesisBlock);

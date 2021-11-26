@@ -4,7 +4,7 @@ export type BlockProps = {
     version: number;
     height: number;
     timestamp: number;
-    body: Object;
+    body: string;
 };
 
 /**
@@ -22,7 +22,7 @@ export default class Block {
     public readonly version: number;
     public readonly height: number;
     public readonly timestamp: number;
-    private readonly body: Object;
+    private readonly body: string;
 
     /**
      * Build a block
@@ -30,13 +30,13 @@ export default class Block {
      * @param {number} version
      * @param {number} height
      * @param {number} timestamp
-     * @param {Object} body 
+     * @param {string} body
      */
     private constructor(
         version: number, 
         height: number,
         timestamp: number,
-        body: Object
+        body: string
     ) {
         this.version = version;
         this.height = height;
@@ -59,7 +59,7 @@ export default class Block {
             + height.toString()
             + timestamp.toString()
             + (isGenesis() ? "" : previousHash)
-            + JSON.stringify(body);
+            + body;
     }
 
     private isGenesis(): boolean {
