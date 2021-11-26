@@ -1,5 +1,5 @@
-export function getTimestamp(): number {
-    return Number.parseInt(new Date().getTime().toString().slice(0, -3));
+export function getTimestamp(date?: Date): number {
+    return Number.parseInt((date || new Date()).getTime().toString().slice(0, -3));
 }
 
 export function json2hex(data: Object): string {
