@@ -2,3 +2,6 @@
 build
 # Node modules directory (Node.js libs)
 node_modules
+
+# Ignore logs
+*.log
