@@ -62,9 +62,14 @@ export default class Blockchain {
         return Array.from(this.chain);
     }
 
+    /**
+     * The requestMessageOwnershipVerification(address) method
+     * will allow you  to request a message that you will use to
+     * sign it with your Bitcoin Wallet (Electrum or Bitcoin Core)
+     * This is the first step before submit your Block.
+     */
     public async requestMessageOwnershipVerification(address: string): Promise<string> {
         const unsignedMessage = `${address}:${getTimestamp()}:starRegistry`;
-
         return unsignedMessage;
     }
 }
