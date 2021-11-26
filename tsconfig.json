@@ -1,6 +1,6 @@
 {
   "include": [ "src/**/*" ],
-  "exclude": [ "build", "node_modules", "**.spec.ts", ],
+  "exclude": [ "build", "node_modules", "src/**/*.spec.ts" ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
