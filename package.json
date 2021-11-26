@@ -29,6 +29,8 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "bitcoinjs-lib": "^6.0.0",
+    "bitcoinjs-message": "^2.2.0",
     "crypto-js": "^4.1.1"
   }
 }
