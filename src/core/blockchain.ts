@@ -61,4 +61,10 @@ export default class Blockchain {
     public getCopyBlock() {
         return Array.from(this.chain);
     }
+
+    public async requestMessageOwnershipVerification(address: string): Promise<string> {
+        const unsignedMessage = `${address}:${getTimestamp()}:starRegistry`;
+
+        return unsignedMessage;
+    }
 }
