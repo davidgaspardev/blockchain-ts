@@ -4,7 +4,6 @@ export type BlockProps = {
     version: number;
     height: number;
     timestamp: Date;
-    previousHash?: string;
     body: Object;
 };
 
@@ -14,20 +13,15 @@ export type BlockProps = {
 export default class Block {
 
     public static create(props: BlockProps): Block {
-        const { version, height, timestamp, previousHash, body } = props;
+        const { version, height, timestamp, body } = props;
 
-        if(!previousHash && height !== 0)
-            // It's not genesis block
-            throw Error("The block must have the previous hash");
-
-        return new Block(version, height, timestamp, previousHash, body);
+        return new Block(version, height, timestamp, body);
     }
 
     // Properties
-    private readonly version: number;
-    private readonly height: number;
-    private readonly timestamp: Date;
-    private readonly previousHash: string;
+    public readonly version: number;
+    public readonly height: number;
+    public readonly timestamp: Date;
     private readonly body: Object;
 
     /**
@@ -43,32 +37,55 @@ export default class Block {
         version: number, 
         height: number,
         timestamp: Date,
-        previousHash: string = "",
         body: Object
     ) {
         this.version = version;
         this.height = height;
         this.timestamp = timestamp;
-        this.previousHash = previousHash;
         this.body = body;
 
-        this.loadAllData = this.loadAllData.bind(this);
+        this.getRawData = this.getRawData.bind(this);
+        this.hasPreviousHash = this.hasPreviousHash.bind(this);
+        this.isGenesis = this.isGenesis.bind(this);
     }
 
-    private loadAllData(): string {
-        const { version, height, timestamp, previousHash, body } = this;
+    public getRawData(): string {
+        const { version, height, timestamp, previousHash, body, hasPreviousHash, isGenesis } = this;
+
+        if(!hasPreviousHash() && !isGenesis()) {
+            throw Error("This block is invalid");
+        } 
 
         return version.toString()
             + height.toString()
             + timestamp.toString()
-            + previousHash
+            + (isGenesis() ? "" : previousHash)
             + JSON.stringify(body);
     }
 
-    public getHash(): string {
-        const { loadAllData } = this;
-        const data = loadAllData();
+    private isGenesis(): boolean {
+        return this.height == 0;
+    }
 
-        return SHA256(data).toString();
+    private hasPreviousHash(): boolean {
+        return this.previousHash !== undefined;
+    }
+
+    // Security hash
+
+    private hash: string | undefined;
+    public setHash(hash: string) {
+        if(!this.hash) this.hash = hash;
+    }
+    public getHash(): string {
+        return this.hash || "";
+    }
+
+    private previousHash: string | undefined;
+    public setPreviousHash(hash: string) {
+        if(!this.previousHash) this.previousHash = hash;
+    }
+    public getPreviousHash(): string {
+        return this.previousHash || "";
     }
 }
