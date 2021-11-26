@@ -16,14 +16,9 @@ describe("Tests in blockchain", () => {
     const newBlockNumber = 8;
     test(`Create ${newBlockNumber} new blocks`, () => {
         for(let i = 1; i <= newBlockNumber; i++) {
-            blockchain.addBlock(Block.create({
-                version: 1,
-                timestamp: getTimestamp(),
-                height: i,
-                body: json2hex({
-                    amount: i * 2500
-                })
-            }));
+            blockchain.addBlock(Block.create(json2hex({
+                amount: i * 2500
+            })));
         }
 
         expect(blockchain!.getCopyBlock().length).toEqual(newBlockNumber + /** genesis */ 1);

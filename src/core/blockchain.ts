@@ -13,10 +13,11 @@ export default class Blockchain {
         return this.instance;
     }
 
-    private readonly chains: Block[] = [];
+    private readonly version: number = 1;
+    private readonly chain: Block[] = [];
 
     private getHeight(): number {
-        return this.chains.length;
+        return this.chain.length;
     }
 
     private constructor() {
@@ -27,38 +28,37 @@ export default class Blockchain {
 
         // Create a genesis block
         const genesisBlock = Block.create({
-            version: 1,
-            height: getHeight(),
-            timestamp: getTimestamp(),
-            body: json2hex({
-                hello: "Blockchain"
-            })
+            hello: "Blockchain"
         });
 
         addBlock(genesisBlock);
     }
 
-    public addBlock(block: Block) {
-        const { getHeight, chains } = this;
+    public async addBlock(block: Block): Promise<Block> {
+        // Destructuring assignment
+        const { getHeight, chain, version } = this;
         const height = getHeight();
-        // Check block height
-        if(block.height !== height) {
-            throw Error("Height invalid");
-        }
+        // Signing block
+        block.version = version;
+        block.height = height;
+        block.timestamp = getTimestamp();
         // Get the blockchain height to check the previous hash 
         // is mandatory.
         if(height > 0) {
-            const previousHash = chains[height - 1].getHash();
-            block.setPreviousHash(previousHash);
+            const previousBlock = chain[height - 1];
+            const previousHash = previousBlock.hash;
+            block.previousHash = previousHash;
         }
         // Generate hash to this block
         const hash = SHA256(block.getRawData()).toString();
-        block.setHash(hash);
-        // Link in chains
-        this.chains.push(block);
+        block.hash = hash;
+        // Push the block into the chain
+        this.chain.push(block);
+
+        return block;
     }
 
     public getCopyBlock() {
-        return Array.from(this.chains);
+        return Array.from(this.chain);
     }
 }

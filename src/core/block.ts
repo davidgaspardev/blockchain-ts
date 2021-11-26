@@ -1,47 +1,81 @@
 import { SHA256 } from "crypto-js";
-import { hex2ascii } from "./utils/format";
-
-export type BlockProps = {
-    version: number;
-    height: number;
-    timestamp: number;
-    body: string;
-};
+import { getTimestamp, hex2ascii, json2hex } from "./utils/format";
 
 /**
  * Block data model
  */
 export default class Block {
 
-    public static create(props: BlockProps): Block {
-        const { version, height, timestamp, body } = props;
+    /** ===================== Access methods =====================  */
 
-        return new Block(version, height, timestamp, body);
+    public static create(data: Object | string): Block {
+        if(typeof data == "object") {
+            // If data is Object, encoding to hexadecimal
+            data = json2hex(data);
+        }
+        return new Block(data as string);
     }
 
-    // Properties
-    public readonly version: number;
-    public readonly height: number;
-    public readonly timestamp: number;
+    /** ===================== Properties =====================  */
+
+    // Version
+    private _version?: number;
+    set version(version: number) {
+        this._version ??= version;
+    }
+    get version(): number {
+        return this._version || 0;
+    }
+
+    // Height
+    private _height?: number;
+    set height(height: number) {
+        this._height ??= height;
+    }
+    get height(): number {
+        return this._height || 0;
+    }
+
+    // Timestamp
+    private _timestamp?: number;
+    set timestamp(timestamp: number | Date) {
+        if(typeof timestamp == "object") {
+            timestamp = getTimestamp(timestamp);
+        }
+        this._timestamp ??= timestamp;
+    }
+    get timestamp(): number {
+        return this._timestamp || 0;
+    }
+
+    // Hash
+    private _hash?: string;
+    set hash(hash: string) {
+        this._hash ??= hash;
+    }
+    get hash(): string {
+        return this._hash || "";
+    }
+
+    // Previous hash
+    private _previousHash?: string;
+    set previousHash(hash: string) {
+        this._previousHash ??= hash;
+    }
+    get previousHash(): string {
+        return this._previousHash || "";
+    }
+
     private readonly body: string;
+
+    /** ===================== Constructor =====================  */
 
     /**
      * Build a block
      * 
-     * @param {number} version
-     * @param {number} height
-     * @param {number} timestamp
-     * @param {string} body
+     * @param {body} body hex
      */
-    private constructor(
-        version: number, 
-        height: number,
-        timestamp: number,
-        body: string
-    ) {
-        this.version = version;
-        this.height = height;
-        this.timestamp = timestamp;
+    private constructor(body: string) {
         this.body = body;
 
         this.getRawData = this.getRawData.bind(this);
@@ -49,12 +83,14 @@ export default class Block {
         this.isGenesis = this.isGenesis.bind(this);
     }
 
+    /** ===================== Methods =====================  */
+
     public getRawData(): string {
         const { version, height, timestamp, previousHash, body, hasPreviousHash, isGenesis } = this;
 
         if(!hasPreviousHash() && !isGenesis()) {
             throw Error("This block is invalid");
-        } 
+        }
 
         return version.toString()
             + height.toString()
@@ -64,29 +100,17 @@ export default class Block {
     }
 
     private isGenesis(): boolean {
-        return this.height == 0;
+        // Descruturing assignment 
+        const { height } = this;
+
+        return height == 0;
     }
 
     private hasPreviousHash(): boolean {
-        return this.previousHash !== undefined;
-    }
+        // Descruturing assignment 
+        const { _previousHash } = this;
 
-    // Security hash
-
-    private hash: string | undefined;
-    public setHash(hash: string) {
-        if(!this.hash) this.hash = hash;
-    }
-    public getHash(): string {
-        return this.hash || "";
-    }
-
-    private previousHash: string | undefined;
-    public setPreviousHash(hash: string) {
-        if(!this.previousHash) this.previousHash = hash;
-    }
-    public getPreviousHash(): string {
-        return this.previousHash || "";
+        return _previousHash !== undefined;
     }
 
     /**
@@ -98,6 +122,7 @@ export default class Block {
         // Destructuring assignment
         const { hash, getRawData } = this;
 
+        this._hash = undefined;
         this.hash = SHA256(getRawData()).toString();
 
         return this.hash === hash;
