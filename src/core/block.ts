@@ -1,4 +1,5 @@
 import { SHA256 } from "crypto-js";
+import { hex2ascii } from "./utils/format";
 
 export type BlockProps = {
     version: number;
@@ -100,5 +101,13 @@ export default class Block {
         this.hash = SHA256(getRawData()).toString();
 
         return this.hash === hash;
+    }
+
+    public getBData(): Object {
+        const { body, height } = this;
+
+        if(height < 1) throw Error(`Cannot read genesis block (height: ${height})`); 
+
+        return JSON.parse(hex2ascii(body));
     }
 }

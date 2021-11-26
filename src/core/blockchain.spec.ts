@@ -29,11 +29,27 @@ describe("Tests in blockchain", () => {
         expect(blockchain!.getCopyBlock().length).toEqual(newBlockNumber + /** genesis */ 1);
     });
 
-    test(`Validate all blocks`, async () => {
+    test("Validate all blocks", async () => {
         const blocks = blockchain!.getCopyBlock();
 
         for(let i = 0; i < blocks.length; i++) {
             expect(await blocks[i].validate()).toEqual(true);
+        }
+    });
+
+    test("Read body of all blocks", () => {
+        const blocks = blockchain!.getCopyBlock();
+
+        for(let i = 0; i < blocks.length; i++) {
+            if(i == 0) {
+                // Genesis block cannot get body
+                expect(() => {
+                    blocks[i].getBData();
+                }).toThrow(Error(`Cannot read genesis block (height: ${i})`))
+            } else {
+                const body = blocks[i].getBData();
+                expect(typeof body).toEqual("object");
+            }
         }
     });
 });
