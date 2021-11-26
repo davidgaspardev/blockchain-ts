@@ -24,6 +24,7 @@ export default class Blockchain {
     private constructor() {
         this.addBlock = this.addBlock.bind(this);
         this.getHeight = this.getHeight.bind(this);
+        this.validateChain = this.validateChain.bind(this);
 
         const { addBlock, getHeight } = this;
 
@@ -37,7 +38,7 @@ export default class Blockchain {
 
     public async addBlock(block: Block): Promise<Block> {
         // Destructuring assignment
-        const { getHeight, chain, version } = this;
+        const { getHeight, validateChain, chain, version } = this;
         const height = getHeight();
         // Signing block
         block.version = version;
@@ -56,6 +57,8 @@ export default class Blockchain {
         // Push the block into the chain
         this.chain.push(block);
 
+        // Show errors (logs)
+        validateChain().then(error => console.log("error:", error));
         return block;
     }
 
@@ -139,5 +142,26 @@ export default class Blockchain {
         }
 
         return stars;
+    }
+
+    public async validateChain(): Promise<Array<Error>> {
+        // Destructuring assignment
+        const { chain } = this;
+
+        let errors: Error[] = []; 
+        for(let i = (chain.length - 1); i > 0; i--) {
+            const currentBlock = chain[i];
+            const previousBlock = chain[i - 1];
+
+            if(currentBlock.previousHash !== previousBlock.hash) {
+                errors.push(new Error(`Invalid link: Block #${currentBlock.height} -> block #${previousBlock.height}.`));
+            }
+
+            if(!(await currentBlock.validate())) {
+                errors.push(new Error(`Invalid block #${currentBlock.height}: ${currentBlock.hash}`));
+            }
+        }
+
+        return errors;
     }
 }

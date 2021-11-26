@@ -13,7 +13,7 @@ describe("Tests in blockchain", () => {
         expect(blockchain).not.toBeNull();
     });
 
-    const newBlockNumber = 8;
+    const newBlockNumber = 20;
     test(`Create ${newBlockNumber} new blocks`, () => {
         for(let i = 1; i <= newBlockNumber; i++) {
             blockchain.addBlock(Block.create(json2hex({
@@ -46,5 +46,9 @@ describe("Tests in blockchain", () => {
                 expect(typeof body).toEqual("object");
             }
         }
+    });
+
+    test("Validate chain", async () => {
+        expect(blockchain.validateChain()).resolves.toStrictEqual([]);
     });
 });
