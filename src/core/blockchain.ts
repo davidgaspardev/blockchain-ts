@@ -1,6 +1,7 @@
 import { SHA256 } from "crypto-js";
 import Block from "./block";
-import { getTimestamp, json2hex } from "./utils/format";
+import { getTimestamp } from "./utils/format";
+import bitcoinMessage from "bitcoinjs-message";
 
 export default class Blockchain {
 
@@ -71,5 +72,29 @@ export default class Blockchain {
     public async requestMessageOwnershipVerification(address: string): Promise<string> {
         const unsignedMessage = `${address}:${getTimestamp()}:starRegistry`;
         return unsignedMessage;
+    }
+
+    /**
+     * The submitStar(address, message, signature, star) method
+     * will allow users to register a new Block with the star object
+     * into the chain.
+     */
+    public async submitStar(address: string, message: string, signature: string, star: Object): Promise<Block> {
+        // Destruturing assignment
+        const { addBlock } = this;
+
+        // Check timeout (5min)
+        const requestTimestamp = parseInt(message.split(':')[1]);
+        const spendTimestamp = getTimestamp() - requestTimestamp;
+        if(spendTimestamp >= (5 * 60)) throw Error("Timeout");
+
+        if(!bitcoinMessage.verify(message, address, signature)) {
+            throw Error("Invalid message");
+        }
+
+        // Add block
+        const block = Block.create({ star });
+        block.owner = address;
+        return await addBlock(block);
     }
 }
