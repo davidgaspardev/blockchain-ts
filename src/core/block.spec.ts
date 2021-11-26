@@ -1,4 +1,5 @@
 import Block from "./block";
+import { getTimestamp } from "./utils/format";
 
 describe("Block tests", () => {
     let block: Block;
@@ -7,7 +8,7 @@ describe("Block tests", () => {
         block = Block.create({
             version: 1,
             height: 3,
-            timestamp: new Date(),
+            timestamp: getTimestamp(),
             body: {
                 amount: 2500
             }

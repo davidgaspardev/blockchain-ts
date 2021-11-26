@@ -1,5 +1,6 @@
 import Block from "./block";
 import Blockchain from "./blockchain";
+import { getTimestamp } from "./utils/format";
 
 describe("Tests in blockchain", () => {
 
@@ -10,8 +11,6 @@ describe("Tests in blockchain", () => {
 
         expect(blockchain).not.toBeUndefined();
         expect(blockchain).not.toBeNull();
-
-        console.log("Blockchain:", blockchain);
     });
 
     const newBlockNumber = 8;
@@ -19,7 +18,7 @@ describe("Tests in blockchain", () => {
         for(let i = 1; i <= newBlockNumber; i++) {
             blockchain.addBlock(Block.create({
                 version: 1,
-                timestamp: new Date(),
+                timestamp: getTimestamp(),
                 height: i,
                 body: {
                     amount: i * 2500
@@ -28,5 +27,7 @@ describe("Tests in blockchain", () => {
         }
 
         expect(blockchain!.getCopyBlock().length).toEqual(newBlockNumber + /** genesis */ 1);
+
+        console.log("Blockchain:", blockchain);
     });
 });

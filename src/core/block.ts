@@ -3,7 +3,7 @@ import { SHA256 } from "crypto-js";
 export type BlockProps = {
     version: number;
     height: number;
-    timestamp: Date;
+    timestamp: number;
     body: Object;
 };
 
@@ -21,7 +21,7 @@ export default class Block {
     // Properties
     public readonly version: number;
     public readonly height: number;
-    public readonly timestamp: Date;
+    public readonly timestamp: number;
     private readonly body: Object;
 
     /**
@@ -29,14 +29,13 @@ export default class Block {
      * 
      * @param {number} version
      * @param {number} height
-     * @param {Date} timestamp 
-     * @param {string} previousHash 
+     * @param {number} timestamp
      * @param {Object} body 
      */
     private constructor(
         version: number, 
         height: number,
-        timestamp: Date,
+        timestamp: number,
         body: Object
     ) {
         this.version = version;
