@@ -143,4 +143,19 @@ export default class Block {
 
         return JSON.parse(hex2ascii(body));
     }
+
+    public toJson(): Object {
+        // Destructuring assgnment
+        const { version, hash, owner, previousHash, height, timestamp, body } = this;
+
+        return {
+            version,
+            hash,
+            previousHash,
+            height,
+            timestamp,
+            body,
+            owner: owner !== "" ? owner : undefined
+        };
+    }
 }

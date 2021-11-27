@@ -1,9 +1,9 @@
-export function loadMessage(): string {
-  return "Hello, Blockchain!";
-}
+import { Server } from "./server/server";
 
 function main() {
-  console.log(loadMessage());
+  const server = new Server();
+
+  server.run();
 }
 
 main();

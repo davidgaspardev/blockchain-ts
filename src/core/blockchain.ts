@@ -26,7 +26,7 @@ export default class Blockchain {
         this.getHeight = this.getHeight.bind(this);
         this.validateChain = this.validateChain.bind(this);
 
-        const { addBlock, getHeight } = this;
+        const { addBlock } = this;
 
         // Create a genesis block
         const genesisBlock = Block.create({
@@ -133,9 +133,11 @@ export default class Blockchain {
         // Destructuring assignment
         const { chain } = this;
 
-        const stars = chain.filter((block) => {
-            block.owner === address
-        }).map((block) => block.getBData());
+        const stars = chain.filter(
+            (block) => block.owner === address
+        ).map(
+            (block) => block.getBData()
+        );
 
         if(stars.length === 0) {
             throw Error("Address not found");
