@@ -1,6 +1,8 @@
 # Blockchain
 
-Developing a simple **private blockchain** with Typescript.
+Developing a simple **private blockchain** with Typescript. 
+
+The relevant files are in the [`src/core`](https://github.com/davidgaspardev/blockchain-ts/tree/main/src/core) directory which are the **Blockchain** and **Block** classes.
 
 ## Installations
 
