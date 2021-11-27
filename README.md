@@ -2,6 +2,30 @@
 
 Developing a simple **private blockchain** with Typescript.
 
+## Installations
+
+Pre requirements:
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com) or [npm](https://www.npmjs.com)
+
+First install dependencies/packages:
+> Obs: in development I was using **yarn** as package manager.
+```zsh
+yarn
+```
+or with `npm`:
+```
+npm ci
+```
+
+And then just build the application that will run automatically.
+```zsh
+yarn build
+```
+or with `npm`:
+```zsh
+npm build
+```
 ___
 
 ## Public vs Private Blockchain
